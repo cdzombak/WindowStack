@@ -1,0 +1,14 @@
+PODS:
+  - CDZCLIApplication (0.1.0)
+
+DEPENDENCIES:
+  - CDZCLIApplication (from `~/code/CDZCLIApplication/`)
+
+EXTERNAL SOURCES:
+  CDZCLIApplication:
+    :path: ~/code/CDZCLIApplication/
+
+SPEC CHECKSUMS:
+  CDZCLIApplication: 62a6ac664f0019110650cb47b8739b97ba225055
+
+COCOAPODS: 0.29.0

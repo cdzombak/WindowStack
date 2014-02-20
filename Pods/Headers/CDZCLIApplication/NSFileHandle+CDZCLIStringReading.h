@@ -1,0 +1,1 @@
+../../../../CDZCLIApplication/Classes/osx/NSFileHandle+CDZCLIStringReading.h
