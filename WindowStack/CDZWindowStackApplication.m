@@ -87,6 +87,7 @@ void CDZPowerSourceCallback(void *context) {
     
     if (!result) {
         CDZCLILog(@"Error executing AppleScript: %@", error);
+        [self exitWithCode:CDZWindowStackReturnCodeAppleScriptError];
         return nil;
     }
     else {
