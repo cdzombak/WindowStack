@@ -70,7 +70,7 @@ void CDZPowerSourceCallback(void *context) {
     NSParameterAssert(timer == self.windowCheckTimer);
     
     NSString *currentWindowString = [self currentWindowString];
-    if (![currentWindowString isEqualToString:self.lastWindowString]) {
+    if (currentWindowString && ![currentWindowString isEqualToString:self.lastWindowString]) {
         NSDate *now = [NSDate date];
         
         NSString *separatorIfNecessary = [now timeIntervalSinceDate:self.lastChangeDate] > CDZWindowStackLargeBreakTimeInterval ? @"---\n" : @"";
