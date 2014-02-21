@@ -10,9 +10,11 @@
 #import "CDZCLIPrint.h"
 #import <IOKit/ps/IOPowerSources.h>
 
+
 static const NSTimeInterval CDZWindowStackCheckIntervalFrequent = 0.5;
 static const NSTimeInterval CDZWindowStackCheckIntervalBattery = 2.0;
 static const NSTimeInterval CDZWindowStackLargeBreakTimeInterval = 3.0 * 60.0;
+
 
 @interface CDZWindowStackApplication ()
 
@@ -23,7 +25,18 @@ static const NSTimeInterval CDZWindowStackLargeBreakTimeInterval = 3.0 * 60.0;
 @property (nonatomic, readonly) NSAppleScript *windowTitleScript;
 @property (nonatomic, readonly) NSDateFormatter *timeFormatter;
 
+- (void)reconfigureTimer;
+
 @end
+
+
+void CDZPowerSourceCallback(void *context) {
+    NSCParameterAssert(context != NULL);
+    
+    CDZWindowStackApplication *app = (__bridge CDZWindowStackApplication *)(context);
+    [app reconfigureTimer];
+}
+
 
 @implementation CDZWindowStackApplication
 
@@ -31,10 +44,21 @@ static const NSTimeInterval CDZWindowStackLargeBreakTimeInterval = 3.0 * 60.0;
             timeFormatter = _timeFormatter;
 
 - (void)start {
-    CFDictionaryRef externalAdapter = IOPSCopyExternalPowerAdapterDetails();
+    CFRunLoopSourceRef runLoopSource = IOPSCreateLimitedPowerNotification(CDZPowerSourceCallback, (__bridge void *)(self));
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
+    CFRelease(runLoopSource);
+    
+    [self reconfigureTimer];
+}
+
+- (void)reconfigureTimer {
+    [self.windowCheckTimer invalidate];
+    self.windowCheckTimer = nil;
+    
     NSTimeInterval checkInterval = CDZWindowStackCheckIntervalBattery;
+    
+    CFDictionaryRef externalAdapter = IOPSCopyExternalPowerAdapterDetails();
     if (externalAdapter != NULL) {
-        NSLog(@"running on AC");
         checkInterval = CDZWindowStackCheckIntervalFrequent;
         CFRelease(externalAdapter);
     }
