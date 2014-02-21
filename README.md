@@ -12,7 +12,7 @@ See `man windowstack` after installing.
 
 ## Install
 
-Run `xcodebuild -workspace WindowStack.xcworkspace -scheme WindowStack -configuration Release install`.
+`scripts/install`, or run `xcodebuild -workspace WindowStack.xcworkspace -scheme WindowStack -configuration Release install`.
 
 ## Author
 
