@@ -6,9 +6,9 @@ Adjusts its internal timer when you go on battery power to save energy.
 
 See `man windowstack` after installing.
 
-## Example Usage
+## Usage
 
-`windowstack | less`
+`windowstack`
 
 ## Install
 
