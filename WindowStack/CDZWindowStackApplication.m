@@ -8,8 +8,10 @@
 
 #import "CDZWindowStackApplication.h"
 #import "CDZCLIPrint.h"
+#import <IOKit/ps/IOPowerSources.h>
 
-static const NSTimeInterval CDZWindowStackCheckInterval = 0.5;
+static const NSTimeInterval CDZWindowStackCheckIntervalFrequent = 0.5;
+static const NSTimeInterval CDZWindowStackCheckIntervalBattery = 2.0;
 static const NSTimeInterval CDZWindowStackLargeBreakTimeInterval = 3.0 * 60.0;
 
 @interface CDZWindowStackApplication ()
@@ -29,7 +31,15 @@ static const NSTimeInterval CDZWindowStackLargeBreakTimeInterval = 3.0 * 60.0;
             timeFormatter = _timeFormatter;
 
 - (void)start {
-    self.windowCheckTimer = [NSTimer scheduledTimerWithTimeInterval:CDZWindowStackCheckInterval target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
+    CFDictionaryRef externalAdapter = IOPSCopyExternalPowerAdapterDetails();
+    NSTimeInterval checkInterval = CDZWindowStackCheckIntervalBattery;
+    if (externalAdapter != NULL) {
+        NSLog(@"running on AC");
+        checkInterval = CDZWindowStackCheckIntervalFrequent;
+        CFRelease(externalAdapter);
+    }
+    
+    self.windowCheckTimer = [NSTimer scheduledTimerWithTimeInterval:checkInterval target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
 }
 
 - (void)timerFired:(NSTimer *)timer {
@@ -97,7 +107,7 @@ static const NSTimeInterval CDZWindowStackLargeBreakTimeInterval = 3.0 * 60.0;
 
 - (NSDate *)lastChangeDate {
     if (!_lastChangeDate) {
-        _lastChangeDate = [NSDate distantPast];
+        _lastChangeDate = [NSDate date];
     }
     return _lastChangeDate;
 }
