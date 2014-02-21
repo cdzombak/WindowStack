@@ -8,6 +8,10 @@
 
 #import "CDZCLIApplication.h"
 
-@interface CDZWindowStackApplication : CDZCLIApplication
+typedef NS_ENUM(int, CDZWindowStackReturnCode) {
+    CDZWindowStackReturnCodeNormal = 0,
+    CDZWindowStackReturnCodeAppleScriptError = 1,
+};
 
+@interface CDZWindowStackApplication : CDZCLIApplication
 @end
