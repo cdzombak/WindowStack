@@ -11,8 +11,8 @@
 #import <IOKit/ps/IOPowerSources.h>
 
 
-static const NSTimeInterval CDZWindowStackCheckIntervalFrequent = 0.5;
-static const NSTimeInterval CDZWindowStackCheckIntervalBattery = 2.0;
+static const NSTimeInterval CDZWindowStackCheckIntervalFrequent = 1.0;
+static const NSTimeInterval CDZWindowStackCheckIntervalBattery = 2.5;
 static const NSTimeInterval CDZWindowStackLargeBreakTimeInterval = 4.0 * 60.0;
 
 
