@@ -13,6 +13,7 @@
 		A233675218B6ABFA006F5AE8 /* windowstack.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = A233675118B6ABFA006F5AE8 /* windowstack.1 */; };
 		A233675A18B6ADB4006F5AE8 /* CDZWindowStackApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = A233675918B6ADB4006F5AE8 /* CDZWindowStackApplication.m */; };
 		A233675C18B7D382006F5AE8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A233675B18B7D382006F5AE8 /* IOKit.framework */; };
+		A233675E18B93598006F5AE8 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A233675D18B93598006F5AE8 /* ApplicationServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +39,7 @@
 		A233675818B6ADB4006F5AE8 /* CDZWindowStackApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDZWindowStackApplication.h; sourceTree = "<group>"; };
 		A233675918B6ADB4006F5AE8 /* CDZWindowStackApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDZWindowStackApplication.m; sourceTree = "<group>"; };
 		A233675B18B7D382006F5AE8 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		A233675D18B93598006F5AE8 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		D20669674BB5471492BCCC58 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -46,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A233675E18B93598006F5AE8 /* ApplicationServices.framework in Frameworks */,
 				A233675C18B7D382006F5AE8 /* IOKit.framework in Frameworks */,
 				A233674B18B6ABFA006F5AE8 /* Foundation.framework in Frameworks */,
 				347C4772206D444AB34F6383 /* libPods.a in Frameworks */,
@@ -76,6 +79,7 @@
 		A233674918B6ABFA006F5AE8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A233675D18B93598006F5AE8 /* ApplicationServices.framework */,
 				A233675B18B7D382006F5AE8 /* IOKit.framework */,
 				A233674A18B6ABFA006F5AE8 /* Foundation.framework */,
 				D20669674BB5471492BCCC58 /* libPods.a */,

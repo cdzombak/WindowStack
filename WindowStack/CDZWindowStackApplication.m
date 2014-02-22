@@ -8,6 +8,8 @@
 
 #import "CDZWindowStackApplication.h"
 #import "CDZCLIPrint.h"
+
+#import <ApplicationServices/ApplicationServices.h>
 #import <IOKit/ps/IOPowerSources.h>
 
 
