@@ -10,7 +10,7 @@
 
 #import "CDZWindowStackApplication.h"
 
-static const NSTimeInterval CDZCLIApplicationRunLoopInterval = 5.0;
+static const NSTimeInterval CDZCLIApplicationRunLoopInterval = 1.0;
 
 int main(int argc, const char * argv[]) {
     NSRunLoop *runLoop;
