@@ -22,13 +22,20 @@ static const NSTimeInterval CDZWindowStackLargeBreakTimeInterval = 4.0 * 60.0;
 @property (nonatomic, copy) NSString *lastWindowString;
 @property (nonatomic, copy) NSDate *lastChangeDate;
 
-@property (nonatomic, readonly) NSAppleScript *windowTitleScript;
 @property (nonatomic, readonly) NSDateFormatter *timeFormatter;
 
 - (void)reconfigureTimer;
 
 @end
 
+CFTypeRef CopyValueOfAttributeOfUIElement(CFStringRef attribute, AXUIElementRef element) {
+    CFTypeRef result = nil;
+    
+    AXError err = AXUIElementCopyAttributeValue(element, attribute, &result);
+    if (err != kAXErrorSuccess) CDZCLILog(@"AXError %d for attribute %@", err, attribute);
+    
+    return result;
+}
 
 void CDZPowerSourceCallback(void *context) {
     NSCParameterAssert(context != NULL);
@@ -40,10 +47,14 @@ void CDZPowerSourceCallback(void *context) {
 
 @implementation CDZWindowStackApplication
 
-@synthesize windowTitleScript = _windowTitleScript,
-            timeFormatter = _timeFormatter;
+@synthesize timeFormatter = _timeFormatter;
 
 - (void)start {
+    if (!AXIsProcessTrusted()) {
+        CDZCLIPrint(@"You must allow this app to control your computer, in System Preferences -> Security & Privacy -> Accessibility");
+        [self exitWithCode:CDZWindowStackReturnCodeAccessibilityAPISetup];
+    }
+    
     CFRunLoopSourceRef runLoopSource = IOPSCreateLimitedPowerNotification(CDZPowerSourceCallback, (__bridge void *)(self));
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
     CFRelease(runLoopSource);
@@ -82,45 +93,22 @@ void CDZPowerSourceCallback(void *context) {
 }
 
 - (NSString *)currentWindowString {
-    NSDictionary *error;
-    NSAppleEventDescriptor *result = [self.windowTitleScript executeAndReturnError:&error];
+    AXUIElementRef systemWide = AXUIElementCreateSystemWide();
+//    AXUIElementSetMessagingTimeout(systemWide, 10.0);
     
-    if (!result) {
-        CDZCLILog(@"Error executing AppleScript: %@", error);
-        [self exitWithCode:CDZWindowStackReturnCodeAppleScriptError];
-        return nil;
-    }
-    else {
-        NSAssert([result numberOfItems] == 2, @"AppleScript result must have 2 descriptors");
-        // of course they're not zero-indexed. ಠ_ಠ @Apple
-        return [NSString stringWithFormat:@"%@: %@", [[result descriptorAtIndex:1] stringValue], [[result descriptorAtIndex:2] stringValue]];
-    }
-}
-
-- (NSAppleScript *)windowTitleScript {
-    if (!_windowTitleScript) {
-        NSString *script = @"global frontApp, frontAppName, windowTitle\n"
-        "set windowTitle to \"\"\n"
-        "tell application \"System Events\"\n"
-        "set frontApp to first application process whose frontmost is true\n"
-        "set frontAppName to name of frontApp\n"
-        "tell process frontAppName\n"
-        "tell (1st window whose value of attribute \"AXMain\" is true)\n"
-        "set windowTitle to value of attribute \"AXTitle\"\n"
-        "end tell\n"
-        "end tell\n"
-        "end tell\n"
-        "return {frontAppName, windowTitle}\n";
-        
-        _windowTitleScript = [[NSAppleScript alloc] initWithSource:script];
-        NSDictionary *compileError;
-        BOOL compiled = [_windowTitleScript compileAndReturnError:&compileError];
-        if (!compiled) {
-            CDZCLILog(@"Error compiling AppleScript: %@", compileError);
-            [self exitWithCode:CDZWindowStackReturnCodeAppleScriptError];
-        }
-    }
-    return _windowTitleScript;
+    CFArrayRef names;
+    AXUIElementCopyAttributeNames(systemWide, &names);
+    CDZCLILog(@"available names in system wide: %@", names);
+    CFRelease(names);
+    
+    AXUIElementRef focusedApp = CopyValueOfAttributeOfUIElement(kAXFocusedApplicationAttribute, systemWide);
+    AXUIElementRef focusedWindow = CopyValueOfAttributeOfUIElement(kAXFocusedWindowAttribute, focusedApp);
+    
+    if (focusedWindow) CFRelease(focusedWindow);
+    if (focusedApp) CFRelease(focusedApp);
+    if (systemWide) CFRelease(systemWide);
+    
+    return nil;
 }
 
 - (NSString *)lastWindowString {

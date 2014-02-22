@@ -10,7 +10,8 @@
 
 typedef NS_ENUM(int, CDZWindowStackReturnCode) {
     CDZWindowStackReturnCodeNormal = 0,
-    CDZWindowStackReturnCodeAppleScriptError = 1,
+    CDZWindowStackReturnCodeAccessibilityAPIError = 1,
+    CDZWindowStackReturnCodeAccessibilityAPISetup = 2,
 };
 
 @interface CDZWindowStackApplication : CDZCLIApplication
