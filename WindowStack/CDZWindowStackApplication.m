@@ -52,8 +52,9 @@ void CDZPowerSourceCallback(void *context) {
 @synthesize timeFormatter = _timeFormatter;
 
 - (void)start {
-    if (!AXIsProcessTrusted()) {
-        CDZCLIPrint(@"You must allow this app to control your computer, in System Preferences -> Security & Privacy -> Accessibility");
+    NSDictionary *trustOptions = [NSDictionary dictionaryWithObjectsAndKeys:(id)kCFBooleanTrue, kAXTrustedCheckOptionPrompt, nil];
+    if (!AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)trustOptions)) {
+        CDZCLIPrint(@"You must allow the application owning this process to control your computer, in System Preferences -> Security & Privacy -> Accessibility");
         [self exitWithCode:CDZWindowStackReturnCodeAccessibilityAPISetup];
     }
     
