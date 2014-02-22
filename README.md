@@ -25,4 +25,4 @@ See `man windowstack` after installing.
 
 ## License
 
-CDZCLIApplication is available under the MIT license. See the LICENSE file.
+WindowStack is available under the MIT license. See the LICENSE file.
