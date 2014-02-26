@@ -97,14 +97,21 @@ void CDZPowerSourceCallback(void *context) {
 
 - (NSString *)currentWindowString {
     AXUIElementRef systemWide = AXUIElementCreateSystemWide();
-//    AXUIElementSetMessagingTimeout(systemWide, 10.0);
+    
+    // trying to eliminate timing issues:
+    AXUIElementSetMessagingTimeout(systemWide, 10.0);
     
     CFArrayRef names;
     AXUIElementCopyAttributeNames(systemWide, &names);
-    CDZCLILog(@"available names in system wide: %@", names);
-    CFRelease(names);
+    CDZCLILog(@"Available names system wide: %@", names);
+    // Available names are AXRole, AXRoleDescription, AXFocusedUIElement, AXFocusedApplication
+    if (names) CFRelease(names);
     
     AXUIElementRef focusedApp = CopyValueOfAttributeOfUIElement(kAXFocusedApplicationAttribute, systemWide);
+    // ^ *always* fails with AXError -25204 = kAXErrorCannotComplete
+    // "messaging failed in some way or because the application with which the function is communicating is busy or unresponsive."
+    // Why???
+    
     AXUIElementRef focusedWindow = CopyValueOfAttributeOfUIElement(kAXFocusedWindowAttribute, focusedApp);
     
     if (focusedWindow) CFRelease(focusedWindow);
