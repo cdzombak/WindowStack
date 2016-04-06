@@ -1,5 +1,7 @@
 # WindowStack
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 Continuously prints the app name and title of your topmost window, so you can figure out where you were if you get distracted.
 
 Adjusts its internal timer when you go on battery power to save energy.
